@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Owin.StatelessAuth</id>
+        <version>1.0.0</version>
+        <title>Owin.StatelessAuth</title>
+        <authors>Jonathan Channon</authors>
+        <licenseUrl>https://github.com/jchannon/Owin.StatelessAuth/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/jchannon/Owin.StatelessAuth/</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>An OWIN middleware component to authorize requests using a token in the Authorization request header</description>
+        <tags>owin,https, auth, authorization</tags>
+    </metadata>
+    <files>
+        <file src="src\Owin.StatelessAuth\bin\Release\Owin.RequiresStatelessAuth.dll" target="lib\net45\Owin.RequiresStatelessAuth.dll" />
+    </files>
+</package>
