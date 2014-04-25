@@ -1,10 +1,8 @@
-#Owin.RequiresHttps
+#Owin.StatelessAuth
 
-An OWIN middleware component to determine HTTPS requests.
+An OWIN middleware component to determine authorized requests using tokens in the Authorization header.
 
-If the request is `https` then the middleware will call the next item in the queue otherwise a HTTP Status Code of 401 is returned and the request is ended.
-
-There is an optional RequiresHttpsOptions tool which will route any `http` traffic to a `https` location if specified
+If the request is authenticated then the middleware will call the next item in the queue otherwise a HTTP Status Code of 401 is returned and the request is ended.
 
 ##Usage
 
@@ -12,9 +10,8 @@ There is an optional RequiresHttpsOptions tool which will route any `http` traff
     {
         public void Configuration(IAppBuilder app)
         {
-            var redirectOptions = new RequiresHttpsOptions() { RedirectToHttpsPath = "https://mysecureapp.com" };
             app
-                .RequiresHttps(redirectOptions)
+                .RequiresStatelessAuth()
                 .UseNancy();
         }
     }
