@@ -10,9 +10,9 @@ If the request is authenticated then the middleware will call the next item in t
     {
         public void Configuration(IAppBuilder app)
         {
-            app
-                .RequiresStatelessAuth()
-                .UseNancy();
+             app
+               .RequiresStatelessAuth(new MySecureTokenValidator())
+               .UseNancy();
         }
     }
 

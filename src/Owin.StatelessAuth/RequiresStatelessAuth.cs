@@ -9,12 +9,10 @@
     {
         private readonly ITokenValidator tokenValidator;
         private readonly Func<IDictionary<string, object>, Task> nextFunc;
-        private readonly RequiresStatelessAuthOptions options;
 
-        public RequiresStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc,ITokenValidator tokenValidator, RequiresStatelessAuthOptions options)
+        public RequiresStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator)
         {
             this.nextFunc = nextFunc;
-            this.options = options;
             this.tokenValidator = tokenValidator;
         }
 

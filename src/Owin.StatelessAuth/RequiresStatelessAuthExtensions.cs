@@ -2,9 +2,9 @@
 {
     public static class RequiresStatelessAuthExtensions
     {
-        public static IAppBuilder RequiresStatelessAuth(this IAppBuilder app, RequiresStatelessAuthOptions options)
+        public static IAppBuilder RequiresStatelessAuth(this IAppBuilder app, ITokenValidator tokenValidator)
         {
-            return app.Use<RequiresStatelessAuth>(options);
+            return app.Use<RequiresStatelessAuth>(tokenValidator);
         }
     }
 }

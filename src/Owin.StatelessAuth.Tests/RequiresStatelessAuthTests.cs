@@ -92,10 +92,10 @@
             return objects => Task.FromResult(123);
         }
 
-        public RequiresStatelessAuth GetStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator = null, RequiresStatelessAuthOptions options = null)
+        public RequiresStatelessAuth GetStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator = null)
         {
             tokenValidator = tokenValidator ?? GetFakeTokenValidator();
-            return new RequiresStatelessAuth(nextFunc, tokenValidator, options);
+            return new RequiresStatelessAuth(nextFunc, tokenValidator);
         }
 
         private ITokenValidator GetFakeTokenValidator()
