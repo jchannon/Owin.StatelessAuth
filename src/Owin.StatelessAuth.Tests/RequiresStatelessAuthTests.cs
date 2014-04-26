@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using FakeItEasy;
     using RequiresStatelessAuth;
@@ -71,7 +72,7 @@
         {
             //Given
             var fakeTokenValidator = GetFakeTokenValidator();
-            A.CallTo(() => fakeTokenValidator.ValidateUser("123")).Returns(false);
+            A.CallTo(() => fakeTokenValidator.ValidateUser("123")).Returns(null);
             var owinhttps = GetStatelessAuth(GetNextFunc(), tokenValidator:fakeTokenValidator);
             var environment = new Dictionary<string, object>
             {
@@ -85,6 +86,49 @@
             Assert.Equal(401, environment["owin.ResponseStatusCode"]);
             Assert.Equal(true, task.IsCompleted);
             Assert.Equal(0, ((Task<int>)task).Result);
+        }
+
+        [Fact]
+        public void Should_Add_User_To_Owin_Environment()
+        {
+            //Given
+            var owinhttps = GetStatelessAuth(GetNextFunc());
+            var environment = new Dictionary<string, object>
+            {
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}}
+            };
+
+            //When
+            var task = owinhttps.Invoke(environment);
+
+            //Then
+            Assert.True(environment.ContainsKey("server.User"));
+        }
+
+        [Fact]
+        public void Should_Override_User_In_Owin_Environment()
+        {
+            //Given
+            var fakeTokenValidator = A.Fake<ITokenValidator>();
+            A.CallTo(() => fakeTokenValidator.ValidateUser(A<string>.Ignored))
+                .Returns(
+                     new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Role, "DumbUser") }, "Token"))
+                );
+
+            var owinhttps = GetStatelessAuth(GetNextFunc(), tokenValidator:fakeTokenValidator);
+            var environment = new Dictionary<string, object>
+            {
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
+                {"server.User", new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {new Claim(ClaimTypes.Role, "Administrator")}, "Token"))}
+            };
+
+            //When
+            var task = owinhttps.Invoke(environment);
+
+            //Then
+            var user = environment["server.User"] as ClaimsPrincipal;
+
+            Assert.True(user.HasClaim(ClaimTypes.Role,"DumbUser"));
         }
 
         public Func<IDictionary<string, object>, Task> GetNextFunc()
@@ -101,7 +145,10 @@
         private ITokenValidator GetFakeTokenValidator()
         {
             var fakeTokenValidator = A.Fake<ITokenValidator>();
-            A.CallTo(() => fakeTokenValidator.ValidateUser(A<string>.Ignored)).Returns(true);
+            A.CallTo(() => fakeTokenValidator.ValidateUser(A<string>.Ignored))
+                .Returns(
+                     new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {new Claim(ClaimTypes.Role, "Administrator")}, "Token"))
+                );
             return fakeTokenValidator;
         }
     }

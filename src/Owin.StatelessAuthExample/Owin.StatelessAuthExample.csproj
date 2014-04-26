@@ -55,6 +55,8 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="DemoUserIdentity.cs" />
     <Compile Include="HomeModule.cs" />
     <Compile Include="MySecureTokenValidator.cs" />
     <Compile Include="Program.cs" />
