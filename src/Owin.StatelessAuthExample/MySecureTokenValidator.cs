@@ -1,12 +1,13 @@
 ﻿namespace Owin.StatelessAuthExample
 {
     using RequiresStatelessAuth;
+    using System.Security.Claims;
 
     class MySecureTokenValidator : ITokenValidator
     {
-        public bool ValidateUser(string token)
+        public ClaimsPrincipal ValidateUser(string token)
         {
-            return true;
+            return new ClaimsPrincipal();
         }
     }
 }
