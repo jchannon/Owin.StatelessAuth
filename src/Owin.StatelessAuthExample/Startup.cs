@@ -8,6 +8,7 @@
         {
             app.RequiresStatelessAuth(new MySecureTokenValidator())
                .UseNancy();
+            
         }
     }
 }
