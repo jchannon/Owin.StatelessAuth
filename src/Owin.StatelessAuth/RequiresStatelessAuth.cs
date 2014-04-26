@@ -9,6 +9,7 @@
     {
         private readonly ITokenValidator tokenValidator;
         private readonly Func<IDictionary<string, object>, Task> nextFunc;
+        private const string ServerUser = "server.User";
 
         public RequiresStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator)
         {
@@ -32,12 +33,21 @@
                 return ReturnCompletedTask();
             }
 
-            var validated = tokenValidator.ValidateUser(token);
+            var validatedUser = tokenValidator.ValidateUser(token);
 
-            if (!validated)
+            if (validatedUser == null)
             {
                 environment["owin.ResponseStatusCode"] = 401;
                 return ReturnCompletedTask();
+            }
+            
+            if (environment.ContainsKey(ServerUser))
+            {
+                environment[ServerUser] = validatedUser;
+            }
+            else
+            {
+                environment.Add(ServerUser, validatedUser);
             }
 
             return nextFunc(environment);
