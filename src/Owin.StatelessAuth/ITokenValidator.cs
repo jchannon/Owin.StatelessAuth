@@ -1,7 +1,9 @@
 namespace Owin.RequiresStatelessAuth
 {
+    using System.Security.Claims; 
+    
     public interface ITokenValidator
     {
-        bool ValidateUser(string token);
+        ClaimsPrincipal ValidateUser(string token);
     }
 }
