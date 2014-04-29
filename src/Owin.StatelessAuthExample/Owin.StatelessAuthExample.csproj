@@ -51,13 +51,17 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="ConfigProvider.cs" />
     <Compile Include="DemoUserIdentity.cs" />
     <Compile Include="HomeModule.cs" />
+    <Compile Include="IConfigProvider.cs" />
+    <Compile Include="JwtToken.cs" />
     <Compile Include="MySecureTokenValidator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,10 +72,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\jwt\JWT\JWT.csproj">
+      <Project>{a80b51b8-ddf6-4026-98a4-b59653e50b38}</Project>
+      <Name>JWT</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Owin.StatelessAuth\Owin.StatelessAuth.csproj">
       <Project>{f8cf626c-d9b6-43a1-b09e-3c44bd748d6c}</Project>
       <Name>Owin.StatelessAuth</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
