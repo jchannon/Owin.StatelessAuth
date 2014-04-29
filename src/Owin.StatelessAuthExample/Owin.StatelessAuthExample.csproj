@@ -61,7 +61,9 @@
     <Compile Include="DemoUserIdentity.cs" />
     <Compile Include="HomeModule.cs" />
     <Compile Include="IConfigProvider.cs" />
+    <Compile Include="IJwtWrapper.cs" />
     <Compile Include="JwtToken.cs" />
+    <Compile Include="JwtWrapper.cs" />
     <Compile Include="MySecureTokenValidator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
