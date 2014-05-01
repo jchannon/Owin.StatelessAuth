@@ -1,16 +1,24 @@
 ﻿<!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" ng-app>
 <head>
     <meta charset="utf-8" />
     <title></title>
 </head>
-    <body>
-        <h1>Login</h1>
-        <form action="/login" method="POST">
-            <input type="text" name="user"/>
-            <input type="password" name="password"/>
-            <input type="submit" value="Login"/>
-        </form>
-    </body>
+<body ng-controller="appCtrl">
+    <h1>Login</h1>
+    <form ng-submit="getToken()">
+        <input type="text" name="user" ng-model="user" />
+        <input type="password" name="password" ng-model="password" />
+        <input type="submit" value="Login" />
+    </form>
+    
+    <label ng-model="secureresponse"></label> 
+    <button ng-click="getsecureresponse()" value="Get Secure Response"></button>
+
+    <script src="/content/localforage.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+    <script src="/content/angular-localforage.js"></script>
+    <script src="/Content/app.js"></script>
+</body>
 </html>

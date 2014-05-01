@@ -26,9 +26,9 @@
                 throw new ApplicationException("Invalid OWIN request. Expected owin.RequestPath, but not present.");
             }
 
-            var path = (string) environment["owin.RequestPath"];
+            var path = (string)environment["owin.RequestPath"];
 
-            if (requireStatelessAuthOptions != null && requireStatelessAuthOptions.IgnorePaths.Contains(path, StringComparer.OrdinalIgnoreCase))
+            if (requireStatelessAuthOptions != null && requireStatelessAuthOptions.IgnorePaths.Any(x => path.IndexOf(x, StringComparison.OrdinalIgnoreCase) >= 0))
             {
                 return nextFunc(environment);
             }
