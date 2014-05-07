@@ -7,8 +7,8 @@
     <ProjectGuid>{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Owin.RequiresStatelessAuth</RootNamespace>
-    <AssemblyName>Owin.RequiresStatelessAuth</AssemblyName>
+    <RootNamespace>Owin.StatelessAuth</RootNamespace>
+    <AssemblyName>Owin.StatelessAuth</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

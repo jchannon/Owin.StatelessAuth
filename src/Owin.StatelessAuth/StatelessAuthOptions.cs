@@ -1,4 +1,4 @@
-﻿namespace Owin.RequiresStatelessAuth
+﻿namespace Owin.StatelessAuth
 {
     using System.Collections.Generic;
 
