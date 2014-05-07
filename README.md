@@ -11,7 +11,9 @@ If the request is authenticated then the middleware will call the next item in t
         public void Configuration(IAppBuilder app)
         {
              app
-               .RequiresStatelessAuth(new MySecureTokenValidator())
+               .RequiresStatelessAuth(
+               	  new MySecureTokenValidator()
+               	  new RequireStatelessAuthOptions() {IgnorePaths = new List<string>(new []{"/login","/content"})})
                .UseNancy();
         }
     }

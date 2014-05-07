@@ -18,7 +18,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc());
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}}
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
+                {"owin.RequestPath", "/"}
             };
 
             //When
@@ -30,13 +31,46 @@
         }
 
         [Fact]
+        public void Should_Throw_Application_Exception_If_No_Path()
+        {
+            var owinhttps = GetStatelessAuth(GetNextFunc());
+            var environment = new Dictionary<string, object>
+            {
+            };
+
+            //When
+           Assert.Throws<ApplicationException>(()=>owinhttps.Invoke(environment));
+        }
+
+        [Fact]
+        public void Should_Execute_Next_If_Path_Ignored()
+        {
+            //Given
+            var owinhttps = GetStatelessAuth(GetNextFunc(), requireStatelessAuthOptions:new RequireStatelessAuthOptions(){IgnorePaths = new List<string>(){"/"}});
+            var environment = new Dictionary<string, object>
+            {
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
+                {"owin.RequestPath", "/"}
+            };
+
+            //When
+            var task = owinhttps.Invoke(environment);
+
+            //Then
+            Assert.Equal(true, task.IsCompleted);
+            Assert.Equal(123, ((Task<int>)task).Result);
+            
+        }
+
+        [Fact]
         public void Should_Return_401_If_No_Auth_Header_And_Completed_Task()
         {
             //Given
             var owinhttps = GetStatelessAuth(GetNextFunc());
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() }
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() },
+                {"owin.RequestPath", "/"}
             };
 
             //When
@@ -55,7 +89,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc());
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {""}}}}
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {""}}}},
+                {"owin.RequestPath", "/"}
             };
 
             //When
@@ -76,7 +111,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc(), tokenValidator:fakeTokenValidator);
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"123"}}}}
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"123"}}}},
+                {"owin.RequestPath", "/"}
             };
 
             //When
@@ -95,7 +131,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc());
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}}
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
+                {"owin.RequestPath", "/"}
             };
 
             //When
@@ -119,6 +156,7 @@
             var environment = new Dictionary<string, object>
             {
                 {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
+                {"owin.RequestPath", "/"},
                 {"server.User", new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {new Claim(ClaimTypes.Role, "Administrator")}, "Token"))}
             };
 
@@ -136,10 +174,16 @@
             return objects => Task.FromResult(123);
         }
 
-        public RequiresStatelessAuth GetStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator = null)
+        public RequiresStatelessAuth GetStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator = null, RequireStatelessAuthOptions requireStatelessAuthOptions=null)
         {
             tokenValidator = tokenValidator ?? GetFakeTokenValidator();
-            return new RequiresStatelessAuth(nextFunc, tokenValidator);
+            requireStatelessAuthOptions = requireStatelessAuthOptions ?? GetStatelessAuthOptions();
+            return new RequiresStatelessAuth(nextFunc, tokenValidator,requireStatelessAuthOptions);
+        }
+
+        private RequireStatelessAuthOptions GetStatelessAuthOptions()
+        {
+            return new RequireStatelessAuthOptions(){IgnorePaths = Enumerable.Empty<string>()};
         }
 
         private ITokenValidator GetFakeTokenValidator()
