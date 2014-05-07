@@ -5,14 +5,14 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class RequiresStatelessAuth
+    public class StatelessAuth
     {
         private readonly ITokenValidator tokenValidator;
-        private readonly RequireStatelessAuthOptions requireStatelessAuthOptions;
+        private readonly StatelessAuthOptions requireStatelessAuthOptions;
         private readonly Func<IDictionary<string, object>, Task> nextFunc;
         private const string ServerUser = "server.User";
 
-        public RequiresStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator, RequireStatelessAuthOptions requireStatelessAuthOptions)
+        public StatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator, StatelessAuthOptions requireStatelessAuthOptions)
         {
             this.nextFunc = nextFunc;
             this.tokenValidator = tokenValidator;
