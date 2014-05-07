@@ -13,7 +13,7 @@ If the request is authenticated then the middleware will call the next item in t
              app
                .RequiresStatelessAuth(
                	  new MySecureTokenValidator()
-               	  new RequireStatelessAuthOptions() {IgnorePaths = new List<string>(new []{"/login","/content"})})
+               	  new StatelessAuthOptions() {IgnorePaths = new List<string>(new []{"/login","/content"})})
                .UseNancy();
         }
     }
