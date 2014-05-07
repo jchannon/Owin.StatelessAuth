@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>Owin.StatelessAuth</id>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <title>Owin.StatelessAuth</title>
         <authors>Jonathan Channon</authors>
         <licenseUrl>https://github.com/jchannon/Owin.StatelessAuth/blob/master/LICENSE</licenseUrl>
@@ -12,6 +12,6 @@
         <tags>owin,https, auth, authorization</tags>
     </metadata>
     <files>
-        <file src="src\Owin.StatelessAuth\bin\Release\Owin.RequiresStatelessAuth.dll" target="lib\net45\Owin.RequiresStatelessAuth.dll" />
+        <file src="src\Owin.StatelessAuth\bin\Release\Owin.StatelessAuth.dll" target="lib\net45\Owin.StatelessAuth.dll" />
     </files>
 </package>
