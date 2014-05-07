@@ -7,7 +7,7 @@
     {
         public void Configuration(IAppBuilder app)
         {
-            app.RequiresStatelessAuth(new MySecureTokenValidator(new ConfigProvider()), new RequireStatelessAuthOptions() {IgnorePaths = new List<string>(new []{"/login","/content"})})
+            app.RequiresStatelessAuth(new MySecureTokenValidator(new ConfigProvider()), new StatelessAuthOptions() {IgnorePaths = new List<string>(new []{"/login","/content"})})
                 .UseNancy();
 
         }

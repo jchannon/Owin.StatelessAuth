@@ -46,7 +46,7 @@
         public void Should_Execute_Next_If_Path_Ignored()
         {
             //Given
-            var owinhttps = GetStatelessAuth(GetNextFunc(), requireStatelessAuthOptions:new RequireStatelessAuthOptions(){IgnorePaths = new List<string>(){"/"}});
+            var owinhttps = GetStatelessAuth(GetNextFunc(), requireStatelessAuthOptions:new StatelessAuthOptions(){IgnorePaths = new List<string>(){"/"}});
             var environment = new Dictionary<string, object>
             {
                 {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
@@ -174,16 +174,16 @@
             return objects => Task.FromResult(123);
         }
 
-        public RequiresStatelessAuth GetStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator = null, RequireStatelessAuthOptions requireStatelessAuthOptions=null)
+        public StatelessAuth GetStatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator = null, StatelessAuthOptions requireStatelessAuthOptions=null)
         {
             tokenValidator = tokenValidator ?? GetFakeTokenValidator();
             requireStatelessAuthOptions = requireStatelessAuthOptions ?? GetStatelessAuthOptions();
-            return new RequiresStatelessAuth(nextFunc, tokenValidator,requireStatelessAuthOptions);
+            return new StatelessAuth(nextFunc, tokenValidator,requireStatelessAuthOptions);
         }
 
-        private RequireStatelessAuthOptions GetStatelessAuthOptions()
+        private StatelessAuthOptions GetStatelessAuthOptions()
         {
-            return new RequireStatelessAuthOptions(){IgnorePaths = Enumerable.Empty<string>()};
+            return new StatelessAuthOptions(){IgnorePaths = Enumerable.Empty<string>()};
         }
 
         private ITokenValidator GetFakeTokenValidator()

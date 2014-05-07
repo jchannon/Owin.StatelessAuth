@@ -45,9 +45,9 @@
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ITokenValidator.cs" />
-    <Compile Include="RequiresStatelessAuth.cs" />
-    <Compile Include="RequiresStatelessAuthExtensions.cs" />
-    <Compile Include="RequireStatelessAuthOptions.cs" />
+    <Compile Include="StatelessAuth.cs" />
+    <Compile Include="StatelessAuthExtensions.cs" />
+    <Compile Include="StatelessAuthOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
