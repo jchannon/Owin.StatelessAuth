@@ -1,7 +1,7 @@
 ﻿namespace Owin.StatelessAuthExample
 {
     using System.Collections.Generic;
-    using RequiresStatelessAuth;
+    using StatelessAuth;
 
     public class Startup
     {

@@ -6,7 +6,7 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
     using FakeItEasy;
-    using RequiresStatelessAuth;
+    using StatelessAuth;
     using Xunit;
 
     public class RequiresStatelessAuthTests

@@ -4,8 +4,8 @@
     using System.Collections;
     using System.Collections.Generic;
     using JWT;
-    using RequiresStatelessAuth;
     using System.Security.Claims;
+    using StatelessAuth;
 
     public class MySecureTokenValidator : ITokenValidator
     {

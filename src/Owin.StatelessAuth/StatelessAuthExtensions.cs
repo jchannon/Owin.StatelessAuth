@@ -1,4 +1,4 @@
-﻿namespace Owin.RequiresStatelessAuth
+﻿namespace Owin.StatelessAuth
 {
     public static class StatelessAuthExtensions
     {
