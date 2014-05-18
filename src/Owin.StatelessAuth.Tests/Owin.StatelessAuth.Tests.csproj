@@ -46,7 +46,7 @@
     <Compile Include="..\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="RequiresStatelessAuthTests.cs" />
+    <Compile Include="StatelessAuthTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

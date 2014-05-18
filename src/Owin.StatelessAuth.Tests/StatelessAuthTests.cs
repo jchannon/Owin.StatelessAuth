@@ -1,4 +1,4 @@
-﻿namespace Owin.RequiresHttps.Tests
+﻿namespace Owin.StatelessAuth.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -6,10 +6,9 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
     using FakeItEasy;
-    using StatelessAuth;
     using Xunit;
 
-    public class RequiresStatelessAuthTests
+    public class StatelessAuthTests
     {
         [Fact]
         public void Should_Execute_Next_If_Validated()
@@ -167,6 +166,26 @@
             var user = environment["server.User"] as ClaimsPrincipal;
 
             Assert.True(user.HasClaim(ClaimTypes.Role,"DumbUser"));
+        }
+
+        [Fact]
+        public void Should_Return_WWW_Authenticate_Header()
+        {
+            //Given
+            var owinhttps = GetStatelessAuth(GetNextFunc());
+            var environment = new Dictionary<string, object>
+            {
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() },
+                {"owin.RequestPath", "/"}
+            };
+
+            //When
+            var task = owinhttps.Invoke(environment);
+
+            var responseHeaders = (IDictionary<string, string[]>)environment["owin.ResponseHeaders"];
+
+            //Then
+            Assert.True(responseHeaders.ContainsKey("WWW-Authenticate"));
         }
 
         public Func<IDictionary<string, object>, Task> GetNextFunc()

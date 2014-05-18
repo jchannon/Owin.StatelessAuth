@@ -36,14 +36,14 @@
             var requestHeaders = (IDictionary<string, string[]>)environment["owin.RequestHeaders"];
             if (!requestHeaders.ContainsKey("Authorization"))
             {
-                environment["owin.ResponseStatusCode"] = 401;
+                SetResponseStatusCodeAndHeader(environment);
                 return ReturnCompletedTask();
             }
 
             var token = requestHeaders["Authorization"].FirstOrDefault();
             if (string.IsNullOrWhiteSpace(token))
             {
-                environment["owin.ResponseStatusCode"] = 401;
+                SetResponseStatusCodeAndHeader(environment);
                 return ReturnCompletedTask();
             }
 
@@ -51,7 +51,7 @@
 
             if (validatedUser == null)
             {
-                environment["owin.ResponseStatusCode"] = 401;
+                SetResponseStatusCodeAndHeader(environment);
                 return ReturnCompletedTask();
             }
 
@@ -65,6 +65,18 @@
             }
 
             return nextFunc(environment);
+        }
+
+        private void SetResponseStatusCodeAndHeader(IDictionary<string, object> environment)
+        {
+            environment["owin.ResponseStatusCode"] = 401;
+            if (!environment.ContainsKey("owin.ResponseHeaders"))
+            {
+                environment.Add("owin.ResponseHeaders", new Dictionary<string,string[]>());
+            }
+
+            var responseHeaders = (IDictionary<string, string[]>)environment["owin.ResponseHeaders"];
+            responseHeaders.Add("WWW-Authenticate", new[] { "Digest realm=\"Restricted\"" });
         }
 
         private Task ReturnCompletedTask()
