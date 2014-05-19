@@ -169,26 +169,6 @@
         }
 
         [Fact]
-        public void Should_Return_WWW_Authenticate_Header()
-        {
-            //Given
-            var owinhttps = GetStatelessAuth(GetNextFunc());
-            var environment = new Dictionary<string, object>
-            {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() },
-                {"owin.RequestPath", "/"}
-            };
-
-            //When
-            var task = owinhttps.Invoke(environment);
-
-            var responseHeaders = (IDictionary<string, string[]>)environment["owin.ResponseHeaders"];
-
-            //Then
-            Assert.True(responseHeaders.ContainsKey("WWW-Authenticate"));
-        }
-
-        [Fact]
         public void Should_Return_WWW_Authenticate_Header_In_Options()
         {
             //Given

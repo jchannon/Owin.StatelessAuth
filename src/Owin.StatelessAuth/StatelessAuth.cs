@@ -71,21 +71,19 @@
         {
             environment["owin.ResponseStatusCode"] = 401;
 
-            var wwwauthenticatechallenge = "Digest";
 
             if (statelessAuthOptions != null && !string.IsNullOrWhiteSpace(statelessAuthOptions.WWWAuthenticateChallenge))
             {
-                wwwauthenticatechallenge = statelessAuthOptions.WWWAuthenticateChallenge;
+                var wwwauthenticatechallenge = statelessAuthOptions.WWWAuthenticateChallenge;
+
+                if (!environment.ContainsKey("owin.ResponseHeaders"))
+                {
+                    environment.Add("owin.ResponseHeaders", new Dictionary<string, string[]>());
+                }
+
+                var responseHeaders = (IDictionary<string, string[]>) environment["owin.ResponseHeaders"];
+                responseHeaders.Add("WWW-Authenticate", new[] {wwwauthenticatechallenge});
             }
-
-            if (!environment.ContainsKey("owin.ResponseHeaders"))
-            {
-                environment.Add("owin.ResponseHeaders", new Dictionary<string, string[]>());
-            }
-
-            var responseHeaders = (IDictionary<string, string[]>)environment["owin.ResponseHeaders"];
-            responseHeaders.Add("WWW-Authenticate", new[] { wwwauthenticatechallenge });
-
         }
 
         private Task ReturnCompletedTask()
