@@ -8,15 +8,15 @@
     public class StatelessAuth
     {
         private readonly ITokenValidator tokenValidator;
-        private readonly StatelessAuthOptions requireStatelessAuthOptions;
+        private readonly StatelessAuthOptions statelessAuthOptions;
         private readonly Func<IDictionary<string, object>, Task> nextFunc;
         private const string ServerUser = "server.User";
 
-        public StatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator, StatelessAuthOptions requireStatelessAuthOptions)
+        public StatelessAuth(Func<IDictionary<string, object>, Task> nextFunc, ITokenValidator tokenValidator, StatelessAuthOptions statelessAuthOptions)
         {
             this.nextFunc = nextFunc;
             this.tokenValidator = tokenValidator;
-            this.requireStatelessAuthOptions = requireStatelessAuthOptions;
+            this.statelessAuthOptions = statelessAuthOptions;
         }
 
         public Task Invoke(IDictionary<string, object> environment)
@@ -28,7 +28,7 @@
 
             var path = (string)environment["owin.RequestPath"];
 
-            if (requireStatelessAuthOptions != null && requireStatelessAuthOptions.IgnorePaths.Any(x => path.IndexOf(x, StringComparison.OrdinalIgnoreCase) >= 0))
+            if (statelessAuthOptions != null && statelessAuthOptions.IgnorePaths.Any(x => path.IndexOf(x, StringComparison.OrdinalIgnoreCase) >= 0))
             {
                 return nextFunc(environment);
             }
@@ -36,14 +36,14 @@
             var requestHeaders = (IDictionary<string, string[]>)environment["owin.RequestHeaders"];
             if (!requestHeaders.ContainsKey("Authorization"))
             {
-                environment["owin.ResponseStatusCode"] = 401;
+                SetResponseStatusCodeAndHeader(environment);
                 return ReturnCompletedTask();
             }
 
             var token = requestHeaders["Authorization"].FirstOrDefault();
             if (string.IsNullOrWhiteSpace(token))
             {
-                environment["owin.ResponseStatusCode"] = 401;
+                SetResponseStatusCodeAndHeader(environment);
                 return ReturnCompletedTask();
             }
 
@@ -51,7 +51,7 @@
 
             if (validatedUser == null)
             {
-                environment["owin.ResponseStatusCode"] = 401;
+                SetResponseStatusCodeAndHeader(environment);
                 return ReturnCompletedTask();
             }
 
@@ -65,6 +65,25 @@
             }
 
             return nextFunc(environment);
+        }
+
+        private void SetResponseStatusCodeAndHeader(IDictionary<string, object> environment)
+        {
+            environment["owin.ResponseStatusCode"] = 401;
+
+
+            if (statelessAuthOptions != null && !string.IsNullOrWhiteSpace(statelessAuthOptions.WWWAuthenticateChallenge))
+            {
+                var wwwauthenticatechallenge = statelessAuthOptions.WWWAuthenticateChallenge;
+
+                if (!environment.ContainsKey("owin.ResponseHeaders"))
+                {
+                    environment.Add("owin.ResponseHeaders", new Dictionary<string, string[]>());
+                }
+
+                var responseHeaders = (IDictionary<string, string[]>) environment["owin.ResponseHeaders"];
+                responseHeaders.Add("WWW-Authenticate", new[] {wwwauthenticatechallenge});
+            }
         }
 
         private Task ReturnCompletedTask()
