@@ -48,7 +48,7 @@
             var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/" } });
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() },
                 {"owin.RequestPath", "/"}
             };
 
@@ -58,7 +58,26 @@
             //Then
             Assert.Equal(true, task.IsCompleted);
             Assert.Equal(123, ((Task<int>)task).Result);
+        }
 
+
+        [Fact]
+        public void Should_Return_401_If_Misses_Ignore_Path()
+        {
+            //Given
+            var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/" } });
+            var environment = new Dictionary<string, object>
+            {
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() },
+                {"owin.RequestPath", "/authentic"}
+            };
+
+            //When
+            var task = owinhttps.Invoke(environment);
+
+            //Then
+            Assert.Equal(true, task.IsCompleted);
+            Assert.Equal(401, environment["owin.ResponseStatusCode"]);
         }
 
         [Fact]

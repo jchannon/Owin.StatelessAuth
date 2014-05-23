@@ -28,7 +28,7 @@
 
             var path = (string)environment["owin.RequestPath"];
 
-            if (statelessAuthOptions != null && statelessAuthOptions.IgnorePaths.Any(x => path.IndexOf(x, StringComparison.OrdinalIgnoreCase) >= 0))
+            if (statelessAuthOptions != null && statelessAuthOptions.IgnorePaths.Any(x => path.Equals(x, StringComparison.OrdinalIgnoreCase)))
             {
                 return nextFunc(environment);
             }
