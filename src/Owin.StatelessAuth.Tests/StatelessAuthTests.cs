@@ -46,7 +46,6 @@
         {
             //Given
             var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/" } });
-            var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/" } } );
             var environment = new Dictionary<string, object>
             {
                 {"owin.RequestHeaders", new Dictionary<string, string[]>() },
