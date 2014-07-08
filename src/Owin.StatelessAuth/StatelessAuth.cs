@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using Minimatch;
 
     public class StatelessAuth
     {
@@ -26,11 +29,19 @@
                 throw new ApplicationException("Invalid OWIN request. Expected owin.RequestPath, but not present.");
             }
 
-            var path = (string)environment["owin.RequestPath"];
+            var path = Uri.UnescapeDataString((string)environment["owin.RequestPath"]);
 
-            if (statelessAuthOptions != null && statelessAuthOptions.IgnorePaths.Any(x => path.IndexOf(x, StringComparison.OrdinalIgnoreCase) >= 0))
+            if (statelessAuthOptions != null)
             {
-                return nextFunc(environment);
+                foreach (var ignorePath in statelessAuthOptions.IgnorePaths)
+                {
+                    var mm = new Minimatcher(ignorePath);
+
+                    if (mm.IsMatch(path))
+                    {
+                        return nextFunc(environment);
+                    }
+                }
             }
 
             var requestHeaders = (IDictionary<string, string[]>)environment["owin.RequestHeaders"];
@@ -81,14 +92,65 @@
                     environment.Add("owin.ResponseHeaders", new Dictionary<string, string[]>());
                 }
 
-                var responseHeaders = (IDictionary<string, string[]>) environment["owin.ResponseHeaders"];
-                responseHeaders.Add("WWW-Authenticate", new[] {wwwauthenticatechallenge});
+                var responseHeaders = (IDictionary<string, string[]>)environment["owin.ResponseHeaders"];
+                responseHeaders.Add("WWW-Authenticate", new[] { wwwauthenticatechallenge });
             }
         }
 
         private Task ReturnCompletedTask()
         {
             return Task.FromResult(0);
+        }
+
+        public bool PathMatchesIgnoredPath(string pattern, string path)
+        {
+            var regex = FindFilesPatternToRegex.Convert(pattern);
+            return regex.IsMatch(path);
+        }
+
+        internal static class FindFilesPatternToRegex
+        {
+            private static readonly Regex HasQuestionMarkRegEx = new Regex(@"\?", RegexOptions.Compiled);
+            private static readonly Regex IlegalCharactersRegex = new Regex("[" + @"\/:<>|" + "\"]", RegexOptions.Compiled);
+            private static readonly Regex CatchExtentionRegex = new Regex(@"^\s*.+\.([^\.]+)\s*$", RegexOptions.Compiled);
+            private const string NonDotCharacters = @"[^.]*";
+
+            public static Regex Convert(string pattern)
+            {
+                if (pattern == null)
+                {
+                    throw new ArgumentNullException();
+                }
+                pattern = pattern.Trim();
+                if (pattern.Length == 0)
+                {
+                    throw new ArgumentException("Pattern is empty.");
+                }
+                if (IlegalCharactersRegex.IsMatch(pattern))
+                {
+                    throw new ArgumentException("Patterns contains ilegal characters.");
+                }
+                bool hasExtension = CatchExtentionRegex.IsMatch(pattern);
+                bool matchExact = false;
+                if (HasQuestionMarkRegEx.IsMatch(pattern))
+                {
+                    matchExact = true;
+                }
+                else if (hasExtension)
+                {
+                    matchExact = CatchExtentionRegex.Match(pattern).Groups[1].Length != 3;
+                }
+                string regexString = Regex.Escape(pattern);
+                regexString = "^" + Regex.Replace(regexString, @"\\\*", ".*");
+                regexString = Regex.Replace(regexString, @"\\\?", ".");
+                if (!matchExact && hasExtension)
+                {
+                    regexString += NonDotCharacters;
+                }
+                regexString += "$";
+                var regex = new Regex(regexString, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                return regex;
+            }
         }
     }
 }

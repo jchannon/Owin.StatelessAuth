@@ -6,10 +6,14 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
     using FakeItEasy;
+    using Minimatch;
     using Xunit;
+    using Xunit.Extensions;
 
     public class StatelessAuthTests
     {
+        private const string ServerUser = "server.User";
+
         [Fact]
         public void Should_Execute_Next_If_Validated()
         {
@@ -40,16 +44,20 @@
             //When
             Assert.Throws<ApplicationException>(() => owinhttps.Invoke(environment));
         }
-
-        [Fact]
-        public void Should_Execute_Next_If_Path_Ignored()
+ 
+        [Theory]
+        [InlineData("/")]
+        [InlineData("/vincentvega/royalewithcheese.css")]
+        [InlineData("/vincentvega/fred.css")]
+        [InlineData("/vincentvega/another.css")]
+        public void Should_Execute_Next_If_Path_Ignored(string requestpath)
         {
             //Given
-            var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/" } });
+            var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/", "/vincentvega/*.css" } });
             var environment = new Dictionary<string, object>
             {
                 {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
-                {"owin.RequestPath", "/"}
+                {"owin.RequestPath", requestpath}
             };
 
             //When
@@ -58,7 +66,29 @@
             //Then
             Assert.Equal(true, task.IsCompleted);
             Assert.Equal(123, ((Task<int>)task).Result);
+            Assert.False(environment.ContainsKey(ServerUser));
+        }
 
+        [Theory]
+        [InlineData("/api/user")]
+        [InlineData("/api/user/js/main.css")]
+        public void Should_Return_401_If_Request_Path_Doesnt_Meet_Ignore_List_And_Empty_Auth_Header(string requestpath)
+        {
+            //Given
+            var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/api/user/js/*.js", "/api/products" } });
+            var environment = new Dictionary<string, object>
+            {
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {""}}}}, //empty header so it falls through ignorelist check
+                {"owin.RequestPath", requestpath}
+            };
+
+            //When
+            var task = owinhttps.Invoke(environment);
+
+            //Then
+            Assert.Equal(401, environment["owin.ResponseStatusCode"]);
+            Assert.Equal(true, task.IsCompleted);
+            Assert.Equal(0, ((Task<int>)task).Result);
         }
 
         [Fact]
@@ -138,7 +168,7 @@
             var task = owinhttps.Invoke(environment);
 
             //Then
-            Assert.True(environment.ContainsKey("server.User"));
+            Assert.True(environment.ContainsKey(ServerUser));
         }
 
         [Fact]
@@ -156,14 +186,14 @@
             {
                 {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
                 {"owin.RequestPath", "/"},
-                {"server.User", new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {new Claim(ClaimTypes.Role, "Administrator")}, "Token"))}
+                {ServerUser, new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {new Claim(ClaimTypes.Role, "Administrator")}, "Token"))}
             };
 
             //When
             var task = owinhttps.Invoke(environment);
 
             //Then
-            var user = environment["server.User"] as ClaimsPrincipal;
+            var user = environment[ServerUser] as ClaimsPrincipal;
 
             Assert.True(user.HasClaim(ClaimTypes.Role, "DumbUser"));
         }
