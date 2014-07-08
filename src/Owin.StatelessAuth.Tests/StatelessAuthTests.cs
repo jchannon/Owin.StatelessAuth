@@ -6,7 +6,6 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
     using FakeItEasy;
-    using Minimatch;
     using Xunit;
     using Xunit.Extensions;
 
