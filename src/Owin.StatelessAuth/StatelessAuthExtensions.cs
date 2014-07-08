@@ -4,7 +4,7 @@
     {
         public static IAppBuilder RequiresStatelessAuth(this IAppBuilder app, ITokenValidator tokenValidator, StatelessAuthOptions options = null)
         {
-            return app.Use<StatelessAuth>(tokenValidator, options);
+            return app.Use(typeof(StatelessAuth), tokenValidator, options);
         }
     }
 }

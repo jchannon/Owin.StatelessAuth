@@ -60,7 +60,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Owin.StatelessAuth\Owin.StatelessAuth.csproj">
       <Project>{f8cf626c-d9b6-43a1-b09e-3c44bd748d6c}</Project>
-      <Name>Owin.RequiresHttps</Name>
+      <Name>Owin.StatelessAuth</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
