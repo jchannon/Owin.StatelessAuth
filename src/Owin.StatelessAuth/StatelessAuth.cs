@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using Minimatch;
 
     public class StatelessAuth
     {
@@ -26,11 +29,19 @@
                 throw new ApplicationException("Invalid OWIN request. Expected owin.RequestPath, but not present.");
             }
 
-            var path = (string)environment["owin.RequestPath"];
+            var path = Uri.UnescapeDataString((string)environment["owin.RequestPath"]);
 
-            if (statelessAuthOptions != null && statelessAuthOptions.IgnorePaths.Any(x => path.IndexOf(x, StringComparison.OrdinalIgnoreCase) >= 0))
+            if (statelessAuthOptions != null)
             {
-                return nextFunc(environment);
+                foreach (var ignorePath in statelessAuthOptions.IgnorePaths)
+                {
+                    var mm = new Minimatcher(ignorePath);
+
+                    if (mm.IsMatch(path))
+                    {
+                        return nextFunc(environment);
+                    }
+                }
             }
 
             var requestHeaders = (IDictionary<string, string[]>)environment["owin.RequestHeaders"];
@@ -81,8 +92,8 @@
                     environment.Add("owin.ResponseHeaders", new Dictionary<string, string[]>());
                 }
 
-                var responseHeaders = (IDictionary<string, string[]>) environment["owin.ResponseHeaders"];
-                responseHeaders.Add("WWW-Authenticate", new[] {wwwauthenticatechallenge});
+                var responseHeaders = (IDictionary<string, string[]>)environment["owin.ResponseHeaders"];
+                responseHeaders.Add("WWW-Authenticate", new[] { wwwauthenticatechallenge });
             }
         }
 
