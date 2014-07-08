@@ -35,7 +35,7 @@
             {
                 foreach (var ignorePath in statelessAuthOptions.IgnorePaths)
                 {
-                    var mm = new Minimatcher(ignorePath);
+                    var mm = new Minimatcher(ignorePath, new Options(){IgnoreCase = true});
 
                     if (mm.IsMatch(path))
                     {
