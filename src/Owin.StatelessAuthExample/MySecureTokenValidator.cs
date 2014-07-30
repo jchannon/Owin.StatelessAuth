@@ -53,7 +53,7 @@
 
                 return new ClaimsPrincipal(new ClaimsIdentity(jwttoken.Claims, "Token"));
             }
-            catch (SignatureVerificationException)
+            catch (Exception)
             {
                 return null;
             }
