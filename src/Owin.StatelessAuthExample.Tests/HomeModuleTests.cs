@@ -46,9 +46,9 @@
         /// </summary>
         /// <param name="addAuthHeader"></param>
         /// <remarks>
-        /// Could pass in a TinyIOCContainer to this method setup with with fakes to pass to your app's Startup which in turn passes to Nancy if there is important logic
-        /// in your main applications Bootstrapper that needs testing.
-        /// You could use a ConfigurableBootstrapper from Nancy to use and test Startup class if you don't have any logic in your app's Bootstrapper using this approach
+        /// Could pass in a TinyIOCContainer to this method setup with with fakes to pass to your app's Startup constructor which in turn is passed to Nancy if there is important logic
+        /// in your main application's Bootstrapper that needs testing.
+        /// You could use a ConfigurableBootstrapper from Nancy to use a test Startup class if you don't have any logic in your app's Bootstrapper using this approach
         /// https://gist.github.com/jchannon/e1e409a702cfd8d5d68a
         /// </remarks>
         /// <returns></returns>
