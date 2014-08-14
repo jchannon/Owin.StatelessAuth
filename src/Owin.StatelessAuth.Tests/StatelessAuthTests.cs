@@ -187,6 +187,7 @@
 
             var owinhttps = GetStatelessAuth(GetNextFunc(), tokenValidator: fakeTokenValidator);
 
+            //TODO Tidy on 3.8 Mono release
             var overriddenUser = new ClaimsPrincipal();
             var overriddenIdentity = new ClaimsIdentity("Token");
             overriddenIdentity.AddClaim(new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Administrator"));
@@ -205,6 +206,7 @@
             //Then
             var user = environment[ServerUser] as ClaimsPrincipal;
 
+            //TODO Tidy on 3.8 Mono release
             Assert.True(user.HasClaim(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && x.Value == "DumbUser"));
         }
 

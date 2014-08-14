@@ -50,6 +50,8 @@
                 {
                     return null;
                 }
+
+                //TODO Tidy on 3.8 Mono release
                 var claimsPrincipal = new ClaimsPrincipal();
                 var claimsIdentity = new ClaimsIdentity("Token");
                 claimsIdentity.AddClaims(jwttoken.Claims);
