@@ -19,6 +19,7 @@
                 context.CurrentUser = new DemoUserIdentity()
                 {
                     UserName = user.Identity.Name,
+                    //TODO Tidy on 3.8 Mono release
                     Claims = user.Claims.Where(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Select(x => x.Value)
                 };
             }

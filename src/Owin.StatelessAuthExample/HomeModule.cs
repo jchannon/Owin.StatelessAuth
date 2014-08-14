@@ -29,7 +29,7 @@
                     Claims =
                         new List<Claim>(new[]
                         {
-                            new Claim(ClaimTypes.Role, "Administrator"),
+                            new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Administrator"),
                             new Claim(ClaimTypes.Name, "Fred")
                         }),
                     Expiry = DateTime.UtcNow.AddDays(7)
@@ -46,6 +46,7 @@
     public class UserCredentials
     {
         public string User { get; set; }
+
         public string Password { get; set; }
     }
 }

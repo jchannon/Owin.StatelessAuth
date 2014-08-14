@@ -51,7 +51,12 @@
                     return null;
                 }
 
-                return new ClaimsPrincipal(new ClaimsIdentity(jwttoken.Claims, "Token"));
+                //TODO Tidy on 3.8 Mono release
+                var claimsPrincipal = new ClaimsPrincipal();
+                var claimsIdentity = new ClaimsIdentity("Token");
+                claimsIdentity.AddClaims(jwttoken.Claims);
+                claimsPrincipal.AddIdentity(claimsIdentity);
+                return claimsPrincipal;
             }
             catch (Exception)
             {
