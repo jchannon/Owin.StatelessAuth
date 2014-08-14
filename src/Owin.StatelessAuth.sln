@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio 2012
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.StatelessAuth", "Owin.StatelessAuth\Owin.StatelessAuth.csproj", "{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}"
@@ -24,14 +24,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A898BCF-E7A8-43CB-B80B-9E7CB2BBC572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A898BCF-E7A8-43CB-B80B-9E7CB2BBC572}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A898BCF-E7A8-43CB-B80B-9E7CB2BBC572}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,6 +32,19 @@ Global
 		{F30F3427-9A3A-4F1C-88BB-BBD34638AF40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F30F3427-9A3A-4F1C-88BB-BBD34638AF40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F30F3427-9A3A-4F1C-88BB-BBD34638AF40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Owin.StatelessAuthExample\Owin.StatelessAuthExample.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

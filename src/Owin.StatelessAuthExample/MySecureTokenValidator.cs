@@ -50,8 +50,11 @@
                 {
                     return null;
                 }
-
-                return new ClaimsPrincipal(new ClaimsIdentity(jwttoken.Claims, "Token"));
+                var claimsPrincipal = new ClaimsPrincipal();
+                var claimsIdentity = new ClaimsIdentity("Token");
+                claimsIdentity.AddClaims(jwttoken.Claims);
+                claimsPrincipal.AddIdentity(claimsIdentity);
+                return claimsPrincipal;
             }
             catch (Exception)
             {

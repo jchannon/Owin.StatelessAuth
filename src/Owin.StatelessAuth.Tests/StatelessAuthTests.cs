@@ -20,8 +20,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc());
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
-                {"owin.RequestPath", "/"}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() { { "Authorization", new[] { "mysecuretoken" } } } },
+                { "owin.RequestPath", "/" }
             };
 
             //When
@@ -43,7 +43,7 @@
             //When
             Assert.Throws<ApplicationException>(() => owinhttps.Invoke(environment));
         }
- 
+
         [Theory]
         [InlineData("/")]
         [InlineData("/vincentvega/royalewithcheese.css")]
@@ -55,8 +55,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/", "/vincentvega/*.css" } });
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
-                {"owin.RequestPath", requestpath}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() { { "Authorization", new[] { "mysecuretoken" } } } },
+                { "owin.RequestPath", requestpath }
             };
 
             //When
@@ -77,8 +77,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/api/user/js/*.js", "/api/products" } });
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {""}}}}, //empty header so it falls through ignorelist check
-                {"owin.RequestPath", requestpath}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() { { "Authorization", new[] { "" } } } }, //empty header so it falls through ignorelist check
+                { "owin.RequestPath", requestpath }
             };
 
             //When
@@ -97,8 +97,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc());
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() },
-                {"owin.RequestPath", "/"}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() },
+                { "owin.RequestPath", "/" }
             };
 
             //When
@@ -117,8 +117,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc());
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {""}}}},
-                {"owin.RequestPath", "/"}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() { { "Authorization", new[] { "" } } } },
+                { "owin.RequestPath", "/" }
             };
 
             //When
@@ -139,8 +139,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc(), tokenValidator: fakeTokenValidator);
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"123"}}}},
-                {"owin.RequestPath", "/"}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() { { "Authorization", new[] { "123" } } } },
+                { "owin.RequestPath", "/" }
             };
 
             //When
@@ -159,8 +159,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc());
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
-                {"owin.RequestPath", "/"}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() { { "Authorization", new[] { "mysecuretoken" } } } },
+                { "owin.RequestPath", "/" }
             };
 
             //When
@@ -173,19 +173,30 @@
         [Fact]
         public void Should_Override_User_In_Owin_Environment()
         {
+
             //Given
             var fakeTokenValidator = A.Fake<ITokenValidator>();
+
+            var secureuser = new ClaimsPrincipal();           
+            var claimsIdentity = new ClaimsIdentity("Token");
+            claimsIdentity.AddClaim(new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "DumbUser"));
+            secureuser.AddIdentity(claimsIdentity);
+
             A.CallTo(() => fakeTokenValidator.ValidateUser(A<string>.Ignored))
-                .Returns(
-                     new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Role, "DumbUser") }, "Token"))
-                );
+                .Returns(secureuser);
 
             var owinhttps = GetStatelessAuth(GetNextFunc(), tokenValidator: fakeTokenValidator);
+
+            var overriddenUser = new ClaimsPrincipal();
+            var overriddenIdentity = new ClaimsIdentity("Token");
+            overriddenIdentity.AddClaim(new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Administrator"));
+            overriddenUser.AddIdentity(overriddenIdentity);
+
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {"mysecuretoken"}}}},
-                {"owin.RequestPath", "/"},
-                {ServerUser, new ClaimsPrincipal(new ClaimsIdentity(new Claim[] {new Claim(ClaimTypes.Role, "Administrator")}, "Token"))}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() { { "Authorization", new[] { "mysecuretoken" } } } },
+                { "owin.RequestPath", "/" },
+                { ServerUser, overriddenUser }
             };
 
             //When
@@ -194,7 +205,7 @@
             //Then
             var user = environment[ServerUser] as ClaimsPrincipal;
 
-            Assert.True(user.HasClaim(ClaimTypes.Role, "DumbUser"));
+            Assert.True(user.HasClaim(x => x.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && x.Value == "DumbUser"));
         }
 
         [Fact]
@@ -211,8 +222,8 @@
             
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() },
-                {"owin.RequestPath", "/"}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() },
+                { "owin.RequestPath", "/" }
             };
 
             //When
@@ -246,8 +257,8 @@
             var fakeTokenValidator = A.Fake<ITokenValidator>();
             A.CallTo(() => fakeTokenValidator.ValidateUser(A<string>.Ignored))
                 .Returns(
-                     new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Role, "Administrator") }, "Token"))
-                );
+                new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Administrator") }, "Token"))
+            );
             return fakeTokenValidator;
         }
     }
