@@ -90,6 +90,28 @@
             Assert.Equal(0, ((Task<int>)task).Result);
         }
 
+        [Theory]
+        [InlineData("/api/user")]
+        [InlineData("/api/user/js/main.css")]
+        public void Should_Execute_Next_If_Request_Path_Doesnt_Meet_Ignore_List_And_Empty_Auth_Header_And_PassThrough_Is_Enabled(string requestpath)
+        {
+            //Given
+            var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/api/user/js/*.js", "/api/products" } , PassThroughUnauthorizedRequests = true});
+            var environment = new Dictionary<string, object>
+            {
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {""}}}}, //empty header so it falls through ignorelist check
+                {"owin.RequestPath", requestpath}
+            };
+
+            //When
+            var task = owinhttps.Invoke(environment);
+
+            //Then
+            Assert.Equal(true, task.IsCompleted);
+            Assert.Equal(123, ((Task<int>)task).Result);
+            Assert.False(environment.ContainsKey(ServerUser));
+        }
+
         [Fact]
         public void Should_Return_401_If_No_Auth_Header_And_Completed_Task()
         {
@@ -108,6 +130,26 @@
             Assert.Equal(401, environment["owin.ResponseStatusCode"]);
             Assert.Equal(true, task.IsCompleted);
             Assert.Equal(0, ((Task<int>)task).Result);
+        }
+
+        [Fact]
+        public void Should_Execute_Next_If_No_Auth_Header_And_PassThrough_Is_Enabled()
+        {
+            //Given
+            var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { PassThroughUnauthorizedRequests = true });
+            var environment = new Dictionary<string, object>
+            {
+                {"owin.RequestHeaders", new Dictionary<string, string[]>() },
+                {"owin.RequestPath", "/"}
+            };
+
+            //When
+            var task = owinhttps.Invoke(environment);
+
+            //Then
+            Assert.Equal(true, task.IsCompleted);
+            Assert.Equal(123, ((Task<int>)task).Result);
+            Assert.False(environment.ContainsKey(ServerUser));
         }
 
         [Fact]
