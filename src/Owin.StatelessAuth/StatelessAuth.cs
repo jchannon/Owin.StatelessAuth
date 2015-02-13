@@ -31,7 +31,7 @@
 
             var path = Uri.UnescapeDataString((string)environment["owin.RequestPath"]);
 
-            if (statelessAuthOptions != null)
+            if (statelessAuthOptions != null && statelessAuthOptions.IgnorePaths != null)
             {
                 foreach (var ignorePath in statelessAuthOptions.IgnorePaths)
                 {
@@ -47,23 +47,20 @@
             var requestHeaders = (IDictionary<string, string[]>)environment["owin.RequestHeaders"];
             if (!requestHeaders.ContainsKey("Authorization"))
             {
-                SetResponseStatusCodeAndHeader(environment);
-                return ReturnCompletedTask();
+                return AuthChallengeResponse(environment);
             }
 
             var token = requestHeaders["Authorization"].FirstOrDefault();
             if (string.IsNullOrWhiteSpace(token))
             {
-                SetResponseStatusCodeAndHeader(environment);
-                return ReturnCompletedTask();
+                return AuthChallengeResponse(environment);
             }
 
             var validatedUser = tokenValidator.ValidateUser(token);
 
             if (validatedUser == null)
             {
-                SetResponseStatusCodeAndHeader(environment);
-                return ReturnCompletedTask();
+                return AuthChallengeResponse(environment);
             }
 
             if (environment.ContainsKey(ServerUser))
@@ -78,10 +75,14 @@
             return nextFunc(environment);
         }
 
-        private void SetResponseStatusCodeAndHeader(IDictionary<string, object> environment)
+        private Task AuthChallengeResponse(IDictionary<string, object> environment)
         {
-            environment["owin.ResponseStatusCode"] = 401;
+            if (statelessAuthOptions != null && statelessAuthOptions.PassThroughUnauthorizedRequests)
+            {
+                return nextFunc(environment);
+            }
 
+            environment["owin.ResponseStatusCode"] = 401;
 
             if (statelessAuthOptions != null && !string.IsNullOrWhiteSpace(statelessAuthOptions.WWWAuthenticateChallenge))
             {
@@ -95,10 +96,7 @@
                 var responseHeaders = (IDictionary<string, string[]>)environment["owin.ResponseHeaders"];
                 responseHeaders.Add("WWW-Authenticate", new[] { wwwauthenticatechallenge });
             }
-        }
 
-        private Task ReturnCompletedTask()
-        {
             return Task.FromResult(0);
         }
     }
