@@ -96,11 +96,11 @@
         public void Should_Execute_Next_If_Request_Path_Doesnt_Meet_Ignore_List_And_Empty_Auth_Header_And_PassThrough_Is_Enabled(string requestpath)
         {
             //Given
-            var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/api/user/js/*.js", "/api/products" } , PassThroughUnauthorizedRequests = true});
+            var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { IgnorePaths = new List<string>() { "/api/user/js/*.js", "/api/products" }, PassThroughUnauthorizedRequests = true });
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() {{"Authorization", new[] {""}}}}, //empty header so it falls through ignorelist check
-                {"owin.RequestPath", requestpath}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() { { "Authorization", new[] { "" } } } }, //empty header so it falls through ignorelist check
+                { "owin.RequestPath", requestpath }
             };
 
             //When
@@ -139,8 +139,8 @@
             var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: new StatelessAuthOptions() { PassThroughUnauthorizedRequests = true });
             var environment = new Dictionary<string, object>
             {
-                {"owin.RequestHeaders", new Dictionary<string, string[]>() },
-                {"owin.RequestPath", "/"}
+                { "owin.RequestHeaders", new Dictionary<string, string[]>() },
+                { "owin.RequestPath", "/" }
             };
 
             //When
@@ -259,7 +259,7 @@
             var options = new StatelessAuthOptions()
             {
                 IgnorePaths = Enumerable.Empty<string>(),
-                WWWAuthenticateChallenge = "Basic"
+                WWWAuthenticateChallenge = "Basic realm=\"WallyWorld\""
             };
 
             var owinhttps = GetStatelessAuth(GetNextFunc(), statelessAuthOptions: options);
@@ -276,7 +276,7 @@
             var responseHeaders = (IDictionary<string, string[]>)environment["owin.ResponseHeaders"];
 
             //Then
-            Assert.Equal("Basic", responseHeaders["WWW-Authenticate"].First());
+            Assert.Equal("Basic realm=\"WallyWorld\"", responseHeaders["WWW-Authenticate"].First());
         }
 
         public Func<IDictionary<string, object>, Task> GetNextFunc()
