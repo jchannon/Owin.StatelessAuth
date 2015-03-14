@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22609.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.StatelessAuth", "src\Owin.StatelessAuth\Owin.StatelessAuth.csproj", "{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.StatelessAuth.Tests", "test\Owin.StatelessAuth.Tests\Owin.StatelessAuth.Tests.csproj", "{FF5C2AA7-0727-4AA9-98E7-23B707533026}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.StatelessAuth.Jwt", "src\Owin.StatelessAuth.Jwt\Owin.StatelessAuth.Jwt.csproj", "{6A898BCF-E7A8-43CB-B80B-9E7CB2BBC572}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.StatelessAuth.Jwt.Tests", "test\Owin.StatelessAuth.Jwt.Tests\Owin.StatelessAuth.Jwt.Tests.csproj", "{F30F3427-9A3A-4F1C-88BB-BBD34638AF40}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9E2E3CAC-1AC7-4778-A37E-B34B5BA77BF2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{28373E2C-DE47-4C21-B077-BA8ADFB94E97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{BF4266AD-07EA-43A8-97B0-EA4A40180596}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.StatelessAuth.Sample", "samples\Owin.StatelessAuth.Sample\Owin.StatelessAuth.Sample.csproj", "{BA391DF7-D5A5-4042-92BB-A4C46420A3C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF5C2AA7-0727-4AA9-98E7-23B707533026}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A898BCF-E7A8-43CB-B80B-9E7CB2BBC572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A898BCF-E7A8-43CB-B80B-9E7CB2BBC572}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A898BCF-E7A8-43CB-B80B-9E7CB2BBC572}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A898BCF-E7A8-43CB-B80B-9E7CB2BBC572}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F30F3427-9A3A-4F1C-88BB-BBD34638AF40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F30F3427-9A3A-4F1C-88BB-BBD34638AF40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F30F3427-9A3A-4F1C-88BB-BBD34638AF40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F30F3427-9A3A-4F1C-88BB-BBD34638AF40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA391DF7-D5A5-4042-92BB-A4C46420A3C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA391DF7-D5A5-4042-92BB-A4C46420A3C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA391DF7-D5A5-4042-92BB-A4C46420A3C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA391DF7-D5A5-4042-92BB-A4C46420A3C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F8CF626C-D9B6-43A1-B09E-3C44BD748D6C} = {9E2E3CAC-1AC7-4778-A37E-B34B5BA77BF2}
+		{FF5C2AA7-0727-4AA9-98E7-23B707533026} = {28373E2C-DE47-4C21-B077-BA8ADFB94E97}
+		{6A898BCF-E7A8-43CB-B80B-9E7CB2BBC572} = {9E2E3CAC-1AC7-4778-A37E-B34B5BA77BF2}
+		{F30F3427-9A3A-4F1C-88BB-BBD34638AF40} = {28373E2C-DE47-4C21-B077-BA8ADFB94E97}
+		{BA391DF7-D5A5-4042-92BB-A4C46420A3C0} = {BF4266AD-07EA-43A8-97B0-EA4A40180596}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Owin.StatelessAuthExample\Owin.StatelessAuthExample.csproj
+	EndGlobalSection
+EndGlobal
