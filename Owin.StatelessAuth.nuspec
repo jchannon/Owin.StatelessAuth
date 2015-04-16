@@ -2,22 +2,25 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Owin.StatelessAuth</id>
-        <version>1.0.9</version>
+        <version>1.0.10</version>
         <title>Owin.StatelessAuth</title>
         <authors>Jonathan Channon</authors>
         <licenseUrl>https://github.com/jchannon/Owin.StatelessAuth/blob/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/jchannon/Owin.StatelessAuth/</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>An OWIN middleware component to authorize requests using a token in the Authorization request header and also adding ClaimsPrincipal to OWIN environment</description>
-        <releaseNotes>1.0.9 - Assembly versioning fix
-1.0.8 - Mono compatibility
-1.0.7 - Woops release
-1.0.6 - Added wildcard support to IgnorePaths in StatelessAuthOptions
-      - Removed MS.Owin dependency</releaseNotes>
+        <releaseNotes>
+            1.0.10 - Added boolean PassThroughUnauthorizedRequests property to options
+            1.0.9 - Assembly versioning fix
+            1.0.8 - Mono compatibility
+            1.0.7 - Woops release
+            1.0.6 - Added wildcard support to IgnorePaths in StatelessAuthOptions
+                  - Removed MS.Owin dependency
+        </releaseNotes>
         <tags>owin,https, auth, authorization</tags>
     </metadata>
     <files>
-        <file src="src\Owin.StatelessAuth\bin\Release\Minimatch.dll" target="lib\net45\Minimatch.dll" />
-        <file src="src\Owin.StatelessAuth\bin\Release\Owin.StatelessAuth.dll" target="lib\net45\Owin.StatelessAuth.dll" />
+        <file src="src/Owin.StatelessAuth/bin/Release/Minimatch.dll" target="lib\net45\Minimatch.dll" />
+        <file src="src/Owin.StatelessAuth/bin/Release/Owin.StatelessAuth.dll" target="lib\net45\Owin.StatelessAuth.dll" />
     </files>
 </package>
