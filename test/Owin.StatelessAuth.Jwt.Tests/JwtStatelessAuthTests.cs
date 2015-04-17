@@ -70,13 +70,8 @@
             {
                 var key = new InMemorySymmetricSecurityKey(Convert.FromBase64String(
                     "Srtjyi8wMFfmP9Ub8U2ieVGAcrP/7gK3VM/K6KfJ/fI="));
-
-                var validator = new JwtTokenValidator(
-                    issuer: "http://issuer.com",
-                    audience: "http://mycoolwebsite.com",
-                    key: key);
-
-                app.RequiresStatelessAuth(validator);
+                
+                app.RequiresJwtAuth("http://issuer.com", "http://mycoolwebsite.com", key);
 
                 app.Run(context => Task.FromResult<object>(null));
             });
