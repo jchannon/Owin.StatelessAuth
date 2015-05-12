@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Minimatch">
+    <Reference Include="Minimatch, Version=1.1.0.0, Culture=neutral, PublicKeyToken=0cadeb0b849c27c0, processorArchitecture=MSIL">
       <HintPath>..\packages\Minimatch.1.1.0.0\lib\portable-net40+sl50+win+wp80\Minimatch.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -48,6 +49,7 @@
     <Compile Include="StatelessAuth.cs" />
     <Compile Include="StatelessAuthExtensions.cs" />
     <Compile Include="StatelessAuthOptions.cs" />
+    <Compile Include="UrlEncodingParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

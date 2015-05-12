@@ -1,12 +1,12 @@
 ﻿namespace Owin.StatelessAuth
 {
+    using Minimatch;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using Minimatch;
 
     public class StatelessAuth
     {
@@ -35,7 +35,7 @@
             {
                 foreach (var ignorePath in statelessAuthOptions.IgnorePaths)
                 {
-                    var mm = new Minimatcher(ignorePath, new Options(){IgnoreCase = true});
+                    var mm = new Minimatcher(ignorePath, new Options() { IgnoreCase = true });
 
                     if (mm.IsMatch(path))
                     {
@@ -44,14 +44,14 @@
                 }
             }
 
-            var requestHeaders = (IDictionary<string, string[]>)environment["owin.RequestHeaders"];
-            if (!requestHeaders.ContainsKey("Authorization"))
+            string token = VerifyAuthorizationHeader(environment);
+
+            if (token == null && statelessAuthOptions.VerifyAuthenticationQueryString)
             {
-                return AuthChallengeResponse(environment);
+                token = VerifyAuthorizationQueryString(environment);
             }
 
-            var token = requestHeaders["Authorization"].FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(token))
+            if (token == null)
             {
                 return AuthChallengeResponse(environment);
             }
@@ -73,6 +73,27 @@
             }
 
             return nextFunc(environment);
+        }
+
+        private string VerifyAuthorizationHeader(IDictionary<string, object> environment)
+        {
+            string token = null;
+            var requestHeaders = (IDictionary<string, string[]>)environment["owin.RequestHeaders"];
+            if (requestHeaders.ContainsKey("Authorization"))
+            {
+                token = requestHeaders["Authorization"].FirstOrDefault();
+                token = (string.IsNullOrEmpty(token) ? null : token);
+            }
+
+            return token;
+        }
+
+        private string VerifyAuthorizationQueryString(IDictionary<string, object> environment)
+        {
+            var queryString = environment["owin.RequestQueryString"] as string;
+            var query = new UrlEncodingParser(queryString, statelessAuthOptions.DecodePlusSignsAsSpacesQueryString);
+            var token = query["Authorization"];
+            return (string.IsNullOrEmpty(token) ? null : token);
         }
 
         private Task AuthChallengeResponse(IDictionary<string, object> environment)
